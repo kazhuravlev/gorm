@@ -140,7 +140,7 @@ func (s *DB) SingularTable(enable bool) {
 	s.parent.singularTable = enable
 }
 
-// Where return a new relation, filter records with given conditions, accepts `map`, `struct` or `string` as conditions, refer http://jinzhu.github.io/gorm/curd.html#query
+// Where return a new relation, filter records with given conditions, accepts `map`, `struct` or `string` as conditions, refer http://jinzhu.github.io/gorm/crud.html#query
 func (s *DB) Where(query interface{}, args ...interface{}) *DB {
 	return s.clone().search.Where(query, args...).db
 }
@@ -209,7 +209,7 @@ func (s *DB) Joins(query string, args ...interface{}) *DB {
 //     }
 //
 //     db.Scopes(AmountGreaterThan1000, OrderStatus([]string{"paid", "shipped"})).Find(&orders)
-// Refer https://jinzhu.github.io/gorm/curd.html#scopes
+// Refer https://jinzhu.github.io/gorm/crud.html#scopes
 func (s *DB) Scopes(funcs ...func(*DB) *DB) *DB {
 	for _, f := range funcs {
 		s = f(s)
@@ -217,17 +217,17 @@ func (s *DB) Scopes(funcs ...func(*DB) *DB) *DB {
 	return s
 }
 
-// Unscoped return all record including deleted record, refer Soft Delete https://jinzhu.github.io/gorm/curd.html#soft-delete
+// Unscoped return all record including deleted record, refer Soft Delete https://jinzhu.github.io/gorm/crud.html#soft-delete
 func (s *DB) Unscoped() *DB {
 	return s.clone().search.unscoped().db
 }
 
-// Attrs initialize struct with argument if record not found with `FirstOrInit` https://jinzhu.github.io/gorm/curd.html#firstorinit or `FirstOrCreate` https://jinzhu.github.io/gorm/curd.html#firstorcreate
+// Attrs initialize struct with argument if record not found with `FirstOrInit` https://jinzhu.github.io/gorm/crud.html#firstorinit or `FirstOrCreate` https://jinzhu.github.io/gorm/crud.html#firstorcreate
 func (s *DB) Attrs(attrs ...interface{}) *DB {
 	return s.clone().search.Attrs(attrs...).db
 }
 
-// Assign assign result with argument regardless it is found or not with `FirstOrInit` https://jinzhu.github.io/gorm/curd.html#firstorinit or `FirstOrCreate` https://jinzhu.github.io/gorm/curd.html#firstorcreate
+// Assign assign result with argument regardless it is found or not with `FirstOrInit` https://jinzhu.github.io/gorm/crud.html#firstorinit or `FirstOrCreate` https://jinzhu.github.io/gorm/crud.html#firstorcreate
 func (s *DB) Assign(attrs ...interface{}) *DB {
 	return s.clone().search.Assign(attrs...).db
 }
@@ -301,7 +301,7 @@ func (s *DB) Related(value interface{}, foreignKeys ...string) *DB {
 }
 
 // FirstOrInit find first matched record or initialize a new one with given conditions (only works with struct, map conditions)
-// https://jinzhu.github.io/gorm/curd.html#firstorinit
+// https://jinzhu.github.io/gorm/crud.html#firstorinit
 func (s *DB) FirstOrInit(out interface{}, where ...interface{}) *DB {
 	c := s.clone()
 	if result := c.First(out, where...); result.Error != nil {
@@ -316,7 +316,7 @@ func (s *DB) FirstOrInit(out interface{}, where ...interface{}) *DB {
 }
 
 // FirstOrCreate find first matched record or create a new one with given conditions (only works with struct, map conditions)
-// https://jinzhu.github.io/gorm/curd.html#firstorcreate
+// https://jinzhu.github.io/gorm/crud.html#firstorcreate
 func (s *DB) FirstOrCreate(out interface{}, where ...interface{}) *DB {
 	c := s.clone()
 	if result := c.First(out, where...); result.Error != nil {
@@ -330,12 +330,12 @@ func (s *DB) FirstOrCreate(out interface{}, where ...interface{}) *DB {
 	return c
 }
 
-// Update update attributes with callbacks, refer: https://jinzhu.github.io/gorm/curd.html#update
+// Update update attributes with callbacks, refer: https://jinzhu.github.io/gorm/crud.html#update
 func (s *DB) Update(attrs ...interface{}) *DB {
 	return s.Updates(toSearchableMap(attrs...), true)
 }
 
-// Updates update attributes with callbacks, refer: https://jinzhu.github.io/gorm/curd.html#update
+// Updates update attributes with callbacks, refer: https://jinzhu.github.io/gorm/crud.html#update
 func (s *DB) Updates(values interface{}, ignoreProtectedAttrs ...bool) *DB {
 	return s.clone().NewScope(s.Value).
 		Set("gorm:ignore_protected_attrs", len(ignoreProtectedAttrs) > 0).
@@ -343,12 +343,12 @@ func (s *DB) Updates(values interface{}, ignoreProtectedAttrs ...bool) *DB {
 		callCallbacks(s.parent.callbacks.updates).db
 }
 
-// UpdateColumn update attributes without callbacks, refer: https://jinzhu.github.io/gorm/curd.html#update
+// UpdateColumn update attributes without callbacks, refer: https://jinzhu.github.io/gorm/crud.html#update
 func (s *DB) UpdateColumn(attrs ...interface{}) *DB {
 	return s.UpdateColumns(toSearchableMap(attrs...))
 }
 
-// UpdateColumns update attributes without callbacks, refer: https://jinzhu.github.io/gorm/curd.html#update
+// UpdateColumns update attributes without callbacks, refer: https://jinzhu.github.io/gorm/crud.html#update
 func (s *DB) UpdateColumns(values interface{}) *DB {
 	return s.clone().NewScope(s.Value).
 		Set("gorm:update_column", true).
